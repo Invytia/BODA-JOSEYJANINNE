@@ -186,6 +186,9 @@ html{scroll-behavior:smooth}
 .fab-rsvp.hide{opacity:0;pointer-events:none;transform:translateY(20px)}
 @media (max-width:992px){.fab-rsvp.on{display:block}.footer-editorial{padding-bottom:90px}}
 @media (prefers-reduced-motion:reduce){.wreath .stem{stroke-dashoffset:0}.wreath .lf{opacity:1}}
+
+a,button,summary,.btn,.envelope-wrapper,.fab-rsvp{touch-action:manipulation;-webkit-tap-highlight-color:rgba(184,151,90,.25);cursor:pointer}
+.spark,.wreath,.flap-br,.corner,.divider svg,.mono-wrap svg{pointer-events:none}
 </style>
 </head>
 <body>
@@ -275,9 +278,9 @@ html{scroll-behavior:smooth}
     <h3 class="venue-name">Parroquia de San Isidro Labrador</h3>
     <p class="venue-time">2:45 P.M.</p>
     <div class="map-iframe-container">
-      <iframe src="https://www.google.com/maps?q=Parroquia+de+San+Isidro+Labrador&output=embed" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Mapa de la ceremonia"></iframe>
+      <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3761.4044633486046!2d-99.2174076!3d19.481227!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x85d202f41cfd5a11%3A0x1e2ccfd944cbed3f!2sParroquia%20de%20San%20Isidro%20Labrador!5e0!3m2!1ses-419!2smx!4v1794456469108!5m2!1ses-419!2smx" style="border:0" allowfullscreen loading="lazy" referrerpolicy="strict-origin-when-cross-origin" title="Mapa de la ceremonia"></iframe>
     </div>
-    <a href="https://maps.app.goo.gl/xgCFiJASXeDrDVhL6?g_st=ic" target="_blank" rel="noopener" class="btn" style="width:100%"><i class="fa-solid fa-location-dot"></i> Ubicación exacta</a>
+    <a href="https://maps.app.goo.gl/UbbyVxZmz17JUja86" target="_blank" rel="noopener" class="btn" style="width:100%"><i class="fa-solid fa-location-dot"></i> Ubicación exacta</a>
   </div>
 
   <div class="venue-card anim-el fade-in-up">
@@ -286,9 +289,9 @@ html{scroll-behavior:smooth}
     <h3 class="venue-name">Hacienda de San Nicolás Tolentino</h3>
     <p class="venue-time">6:30 P.M.</p>
     <div class="map-iframe-container">
-      <iframe src="https://www.google.com/maps?q=Hacienda+de+San+Nicol%C3%A1s+Tolentino&output=embed" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Mapa de la recepción"></iframe>
+      <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3765.174054682298!2d-99.0880983!3d19.3182521!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x85ce0217d76c655b%3A0x738e7fd78c763ab!2sHacienda%20de%20San%20Nicolas%20Tolentino!5e0!3m2!1ses-419!2smx!4v1794456503974!5m2!1ses-419!2smx" style="border:0" allowfullscreen loading="lazy" referrerpolicy="strict-origin-when-cross-origin" title="Mapa de la recepción"></iframe>
     </div>
-    <a href="https://maps.app.goo.gl/svNWgm2pUNWY89b46?g_st=ic" target="_blank" rel="noopener" class="btn" style="width:100%"><i class="fa-solid fa-location-dot"></i> Ubicación exacta</a>
+    <a href="https://maps.app.goo.gl/5mke8DQ4qnDYknrx8" target="_blank" rel="noopener" class="btn" style="width:100%"><i class="fa-solid fa-location-dot"></i> Ubicación exacta</a>
   </div>
 
   <h2 class="shine anim-el fade-in-up" style="font-size:2rem;margin-top:10px">ITINERARIO</h2>
@@ -385,6 +388,7 @@ function openInvitation(){
   if(envelopeOpened)return; envelopeOpened=true;
   const screen=document.getElementById('envelope-screen'),content=document.getElementById('invitation-content');
   document.querySelector('.envelope-wrapper').classList.add('open');
+  screen.style.pointerEvents='none';
   audio.play().then(()=>{audioIcon.className='fa-solid fa-pause'}).catch(()=>{});
   setTimeout(()=>{
     screen.style.opacity='0'; content.style.visibility='visible'; content.style.opacity='1';
@@ -462,6 +466,10 @@ document.addEventListener("DOMContentLoaded",function(){
 });
 
 /* ---------- RSVP ---------- */
+function abrirLink(url){
+  const a=document.createElement('a');a.href=url;a.target='_blank';a.rel='noopener';
+  document.body.appendChild(a);a.click();document.body.removeChild(a);
+}
 function sendRSVP(){
   const list=document.getElementById('dynamicGuestList');
   let msg="";
@@ -481,19 +489,19 @@ function sendRSVP(){
     if(!n||!a){alert("Por favor, completa tu nombre y tu respuesta.");return}
     msg=`Hola, soy *${n}*.\n\nQuiero confirmar mi respuesta a la boda de José Juan y Janinne: *${a}*\n\n`;
   }
-  window.open(`https://wa.me/${telefonoWhatsApp}?text=${encodeURIComponent(msg)}`,'_blank');
+  abrirLink(`https://wa.me/${telefonoWhatsApp}?text=${encodeURIComponent(msg)}`);
 }
 
 function sendWishes(){
   const w=document.getElementById('wishesText').value.trim();
   if(!w){alert("Por favor, escribe un mensaje primero.");return}
-  window.open(`https://wa.me/${telefonoWhatsApp}?text=${encodeURIComponent(`¡Hola José Juan y Janinne! Les dejo este mensaje para su libro de firmas:\n\n"${w}"`)}`,'_blank');
+  abrirLink(`https://wa.me/${telefonoWhatsApp}?text=${encodeURIComponent(`¡Hola José Juan y Janinne! Les dejo este mensaje para su libro de firmas:\n\n"${w}"`)}`);
 }
 
 /* ---------- Calendario (.ics) : 12 dic 2026, 14:45 hora CDMX = 20:45 UTC ---------- */
 function downloadICS(){
   const cal=`BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//Boda José Juan y Janinne//ES\nBEGIN:VEVENT\nDTSTART:20261212T204500Z\nDTEND:20261213T080000Z\nSUMMARY:Boda de José Juan y Janinne\nLOCATION:Parroquia de San Isidro Labrador\nDESCRIPTION:¡Acompáñanos a celebrar nuestra boda! Ceremonia 2:45 PM. Recepción 6:30 PM en Hacienda de San Nicolás Tolentino.\nEND:VEVENT\nEND:VCALENDAR`;
-  const url=URL.createObjectURL(new Blob([cal],{type:'text/calendar;charset=utf-8'}));
+  const url='data:text/calendar;charset=utf-8,'+encodeURIComponent(cal);
   const a=document.createElement('a');a.href=url;a.download='Boda_JoseJuan_y_Janinne.ics';document.body.appendChild(a);a.click();document.body.removeChild(a);
 }
 </script>
