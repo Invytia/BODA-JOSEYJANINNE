@@ -265,6 +265,7 @@ a,button,summary,.btn,.envelope-wrapper,.fab-rsvp{touch-action:manipulation;-web
 
   <a href="#donde" class="btn anim-el fade-in-up" style="width:100%"><i class="fa-solid fa-route"></i> Cómo llegar</a>
   <button onclick="downloadICS()" class="btn anim-el fade-in-up" style="width:100%"><i class="fa-regular fa-calendar-plus"></i> Agregar al calendario</button>
+  <a href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Boda+de+Jos%C3%A9+Juan+y+Janinne&dates=20261212T204500Z/20261213T080000Z&location=Parroquia+de+San+Isidro+Labrador&details=Ceremonia+2%3A45+PM.+Recepci%C3%B3n+6%3A30+PM+en+Hacienda+de+San+Nicol%C3%A1s+Tolentino." target="_blank" rel="noopener" class="btn anim-el fade-in-up" style="width:100%;background:transparent;color:var(--olive)"><i class="fa-brands fa-google"></i> Google Calendar</a>
 </div>
 
 <!-- ============ COLUMNA 2 ============ -->
@@ -317,7 +318,7 @@ a,button,summary,.btn,.envelope-wrapper,.fab-rsvp{touch-action:manipulation;-web
   <div class="gift-box anim-el fade-in-up">
     <i class="fa-solid fa-gift" style="color:var(--gold);font-size:1.8rem"></i>
     <p class="code">LIVERPOOL<br>Evento 60068000</p>
-    <a href="https://mesaderegalos.liverpool.com.mx/" target="_blank" rel="noopener" class="btn" style="width:100%">Ver mesa de regalos</a>
+    <a href="https://mesaderegalos.liverpool.com.mx/milistaderegalos/60068000" target="_blank" rel="noopener" class="btn" style="width:100%">Ver mesa de regalos</a>
   </div>
 </div>
 
@@ -500,9 +501,17 @@ function sendWishes(){
 
 /* ---------- Calendario (.ics) : 12 dic 2026, 14:45 hora CDMX = 20:45 UTC ---------- */
 function downloadICS(){
-  const cal=`BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//Boda José Juan y Janinne//ES\nBEGIN:VEVENT\nDTSTART:20261212T204500Z\nDTEND:20261213T080000Z\nSUMMARY:Boda de José Juan y Janinne\nLOCATION:Parroquia de San Isidro Labrador\nDESCRIPTION:¡Acompáñanos a celebrar nuestra boda! Ceremonia 2:45 PM. Recepción 6:30 PM en Hacienda de San Nicolás Tolentino.\nEND:VEVENT\nEND:VCALENDAR`;
-  const url='data:text/calendar;charset=utf-8,'+encodeURIComponent(cal);
-  const a=document.createElement('a');a.href=url;a.download='Boda_JoseJuan_y_Janinne.ics';document.body.appendChild(a);a.click();document.body.removeChild(a);
+  const lines=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Boda Jose Juan y Janinne//ES','CALSCALE:GREGORIAN','METHOD:PUBLISH','BEGIN:VEVENT',
+    'UID:boda-josejuan-janinne-20261212@invytia','DTSTAMP:20261101T000000Z','DTSTART:20261212T204500Z','DTEND:20261213T080000Z',
+    'SUMMARY:Boda de José Juan y Janinne','LOCATION:Parroquia de San Isidro Labrador',
+    'DESCRIPTION:¡Acompáñanos a celebrar nuestra boda! Ceremonia 2:45 PM. Recepción 6:30 PM en Hacienda de San Nicolás Tolentino.',
+    'END:VEVENT','END:VCALENDAR'];
+  const blob=new Blob([lines.join('\r\n')],{type:'text/calendar;charset=utf-8'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;a.download='Boda_JoseJuan_y_Janinne.ics';a.style.display='none';
+  document.body.appendChild(a);a.click();
+  setTimeout(()=>{document.body.removeChild(a);URL.revokeObjectURL(url)},1500);
 }
 </script>
 </body>
