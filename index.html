@@ -198,6 +198,14 @@ html{scroll-behavior:smooth}
 .fold summary:hover,.fold[open] summary{background:var(--olive);color:var(--paper)}
 @media (prefers-reduced-motion:reduce){.wreath .stem{stroke-dashoffset:0}.wreath .lf{opacity:1}}
 
+.rsvp-guest{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;margin-bottom:15px;padding-bottom:15px;border-bottom:1px solid #E2D9C3}
+.rsvp-guest .rsvp-name-ext{font-size:1.25rem;flex:1;min-width:120px}
+.rsvp-guest .guest-name-input{flex:1;min-width:140px;padding:6px 0;background:transparent;border:none;border-bottom:1px solid #D8CFB8;font-family:var(--f-title);font-size:1.2rem;color:var(--text);outline:none}
+.rsvp-guest .guest-name-input:focus{border-bottom-color:var(--gold)}
+.radio-ed-label.disabled{opacity:.35;cursor:not-allowed}
+.rsvp-counter{font-family:var(--f-sans);font-size:.8rem;letter-spacing:2px;text-transform:uppercase;color:var(--olive);text-align:center;margin:6px 0 4px;font-weight:500}
+.rsvp-counter.full{color:var(--gold)}
+.rsvp-limit-msg{font-family:var(--f-sans);font-size:.75rem;letter-spacing:1px;color:#8a6d3b;text-align:center;min-height:1em;margin-top:4px}
 a,button,summary,.btn,.envelope-wrapper{touch-action:manipulation;-webkit-tap-highlight-color:rgba(184,151,90,.25);cursor:pointer}
 .spark,.wreath,.flap-br,.corner,.divider svg,.mono-wrap svg{pointer-events:none}
 </style>
@@ -493,35 +501,132 @@ document.addEventListener("DOMContentLoaded",function(){
   for(let i=0;i<14;i++){const sp=document.createElement('span');sp.className='spark';sp.style.left=(6+Math.random()*88)+'%';sp.style.animationDelay=(Math.random()*9)+'s';sp.style.animationDuration=(7+Math.random()*5)+'s';hero.appendChild(sp)}
 
   /* ===== LISTA DE INVITADOS (SISTEMA DE PASES NOMINALES INVYTIA) =====
-     Uso: ?id=1   Formato:
-     "1": { inv:"Nombre de la invitación", pases:2, nombres:["Persona 1","Persona 2"] }  */
+     Uso: https://invytia.github.io/BODA-JOSEYJANINNE/?id=1
+     Formato: "id": { inv:"Nombre en el pase", pases:N, nombres:["Persona 1", ...] }
+     Regla: se pueden confirmar MENOS personas que los pases, pero NUNCA MÁS. */
   const listaInvitados={
-    // Pendiente: pegar aquí la lista de la clienta
+    "1":{inv:"Mamá Chave",pases:4,nombres:["Mamá Chave", "Roberto Padilla", "Elizabeth Padilla", "Yunuen Padilla"]},
+    "2":{inv:"Familia Baxin Padilla",pases:3,nombres:["Enrique Baxin", "Luz Maria Padilla", "Karina Baxin"]},
+    "3":{inv:"Familia Padilla Salinas",pases:8,nombres:["Carlos", "Socorro", "Mario", "Jazmin", "Ebole", "Donovan", "Güera", "Christopher"]},
+    "4":{inv:"Familia Hinojosa",pases:4,nombres:["Invitado 1", "Invitado 2", "Invitado 3", "Invitado 4"]},
+    "5":{inv:"Madrina Angelina",pases:1,nombres:["Madrina Angelina"]},
+    "6":{inv:"Familia Padilla Benitez",pases:8,nombres:["Invitado 1", "Invitado 2", "Invitado 3", "Invitado 4", "Invitado 5", "Invitado 6", "Invitado 7", "Invitado 8"]},
+    "7":{inv:"Chago",pases:6,nombres:["Invitado 1", "Invitado 2", "Invitado 3", "Invitado 4", "Invitado 5", "Invitado 6"]},
+    "8":{inv:"Familia Padilla Hernandez",pases:2,nombres:["Mario Padilla", "Olivia Hernandez"]},
+    "9":{inv:"Lupita y Familia",pases:3,nombres:["Lupita", "Esposo", "Hija"]},
+    "10":{inv:"Jonathan",pases:1,nombres:["Jonathan"]},
+    "11":{inv:"Cecilia",pases:2,nombres:["Cecila", "Novio"]},
+    "12":{inv:"Familia Hernandez Morales",pases:7,nombres:["Polo", "Marìa", "Yoyis", "Chris", "Edgardo", "Novio Yoyis", "Hija Edgardo"]},
+    "13":{inv:"Edgar Hernandez Valencia",pases:1,nombres:["Edgar Hernandez Valencia"]},
+    "14":{inv:"Sra. Guadalupe y Sr. Julio",pases:5,nombres:["Invitado 1", "Invitado 2", "Invitado 3", "Invitado 4", "Invitado 5"]},
+    "15":{inv:"Elisa Hernandez",pases:8,nombres:["Elisa", "Carlos", "Karla", "Charito", "Dana", "Mia", "Kenia", "Memo"]},
+    "16":{inv:"Familia Hernandez Xochihua",pases:4,nombres:["Paula Hernandez", "Erick Xochihua", "Ana Xochihua", "Carlitos Xochihua"]},
+    "17":{inv:"Familia Tio Fernando",pases:6,nombres:["Invitado 1", "Invitado 2", "Invitado 3", "Invitado 4", "Invitado 5", "Invitado 6"]},
+    "18":{inv:"Tio Palillo",pases:4,nombres:["Tio Palillo", "Tìa Paty", "Chistian", "Karla"]},
+    "19":{inv:"Guillermo y Lety",pases:4,nombres:["Invitado 1", "Invitado 2", "Invitado 3", "Invitado 4"]},
+    "20":{inv:"Matilde Araceli Cordova Contreras",pases:1,nombres:["Matilde Araceli Cordova Contreras"]},
+    "21":{inv:"Familia Navarro Rayòn",pases:2,nombres:["Ilda", "Luis"]},
+    "22":{inv:"Irene Lara",pases:5,nombres:["Invitado 1", "Invitado 2", "Invitado 3", "Invitado 4", "Invitado 5"]},
+    "23":{inv:"Oscar Padilla",pases:5,nombres:["Oscar", "Ever", "Santi", "Sebas", "Emi"]},
+    "24":{inv:"Luisa Baltazar",pases:3,nombres:["Luisa", "Gaby", "Novio Gaby"]},
+    "25":{inv:"Ana Padilla",pases:3,nombres:["Ana", "Lalo", "Lalin"]},
+    "26":{inv:"Fam Juana Hernandez",pases:2,nombres:["Juana", "Elfego"]},
+    "27":{inv:"Maria Luisa Martinez",pases:1,nombres:["Maria Luisa Martinez"]},
+    "28":{inv:"Yolanda Cristina Olvera Cortès",pases:1,nombres:["Yolanda Cristina Olvera Cortès"]},
+    "29":{inv:"Alejandra Alavez",pases:1,nombres:["Alejandra Alavez"]},
+    "30":{inv:"Sra. Ofelia",pases:1,nombres:["Ofelia"]},
+    "31":{inv:"Gaby Liera",pases:2,nombres:["Gaby", "Acompañante"]},
+    "32":{inv:"Alberto Padilla",pases:1,nombres:["Alberto Padilla"]},
+    "33":{inv:"Familia Vazquez Padilla",pases:6,nombres:["Omar Vazquez", "Ivette Padilla", "Jade Vazquez", "Amiga Jade", "Liam Vazquez", "Matias Vazquez"]},
+    "34":{inv:"Fam Vazquez Mendez",pases:3,nombres:["Raul", "Bety", "Gadiel"]},
+    "35":{inv:"Irvin Vazquez",pases:3,nombres:["Irvin", "Edith", "Isis"]},
+    "36":{inv:"Josefina de Lourdes Alcantara Lara",pases:1,nombres:["Josefina de Lourdes Alcantara Lara"]},
+    "37":{inv:"Familia Morales Castañeda",pases:3,nombres:["Juan Carlos Morales Rodriguez", "Rosalba Castañeda Lara", "Diego Morales Castañeda"]},
+    "38":{inv:"Familia Davila Castañeda",pases:2,nombres:["Miguel Davila", "Rocio Castañeda Lara"]},
+    "39":{inv:"Familia Castañeda Cruz",pases:6,nombres:["David Castañeda Lara", "Vianney Cruz Vazquez", "Legna Castañeda Cuz", "Valentina Castañeda Cruz", "Paola Castañeda Cruz", "Gloria Vazquez"]},
+    "40":{inv:"Familia Castañeda Guillen",pases:3,nombres:["Nachin", "Bety", "Panchita"]},
+    "41":{inv:"Familia Castañeda Martinez",pases:3,nombres:["Bruno", "Karen", "Brunito"]},
+    "42":{inv:"Roberto Carlos",pases:3,nombres:["Roberto Carlos", "Mafe", "Carlitos"]},
+    "43":{inv:"Familia Ramirez Dina",pases:2,nombres:["Mario Ramirez", "Japhet Ramirez"]},
+    "44":{inv:"Familia Dina Castañeda",pases:2,nombres:["Estela Castañeda", "Jose Luis Dina"]},
+    "45":{inv:"Israel Dina",pases:2,nombres:["Israel Dina", "Heyzith"]},
+    "46":{inv:"Familia Contreras Castañeda",pases:4,nombres:["Jorge", "Alma", "Fatima", "Natalia"]},
+    "47":{inv:"Christian Castañeda",pases:4,nombres:["Christian", "Nancy", "Anamile", "Mati"]},
+    "48":{inv:"Familia Castañeda Hernandez",pases:2,nombres:["Rodolfo Castañeda", "Petra"]},
+    "49":{inv:"Familia Arroyo Castañeda",pases:5,nombres:["Ricardo", "Ivon", "Ricardito", "Lizeth", "Novio Liz"]},
+    "50":{inv:"Familia Cortes Esparza",pases:4,nombres:["Armando", "Liz", "Maria Luz", "Papà Bimbs"]},
+    "51":{inv:"Familia Aceves",pases:4,nombres:["Armando", "Norma", "Andrea", "Novia Armando"]},
+    "52":{inv:"Familia Garcìa Cuesta",pases:7,nombres:["Erick", "Novia", "German", "Esther", "Karen", "Esposo", "Hijo"]},
+    "53":{inv:"Leonardo Ramirez",pases:2,nombres:["Leonardo", "Alejandra"]},
+    "54":{inv:"Familia Vidal Loera",pases:3,nombres:["Juan Carlos Vidal", "Sandra Loera", "Sebastian Vidal"]},
+    "55":{inv:"Tere Lara Alcantara",pases:1,nombres:["Tere Lara Alcantara"]},
+    "56":{inv:"Ricardo Sanchez Lara",pases:1,nombres:["Ricardo Sanchez Lara"]},
+    "57":{inv:"Roberto Sanchez Lara",pases:2,nombres:["Roberto Sanchez Lara", "Aranza Sanchez"]},
+    "58":{inv:"Familia Sanchez Rodriguez",pases:3,nombres:["Edgar Rodriguez", "Carmen Sanchez", "Karla Rodriguez"]},
+    "59":{inv:"Familia Lara Perez",pases:10,nombres:["Alejandro Lara", "Socorro Perez", "Daniel", "Monica", "Rafael", "Alejandra", "Barbara", "Sandra", "Mateo", "Ana"]},
+    "60":{inv:"Guillermo Alcantara",pases:3,nombres:["Guillermo", "Refugio", "Guillermo JR"]},
+    "61":{inv:"Rodrigo Alcantara",pases:4,nombres:["Rodrigo", "Isabel", "Andrea", "Sofia"]},
+    "62":{inv:"Enrique Alcantara",pases:3,nombres:["Enrique", "Sandra", "Enrique Jr"]},
+    "63":{inv:"Andrea Perez",pases:4,nombres:["Patricia Alcantara", "Hector Aguilar", "Alicia Alcantara", "Andrea Perez"]},
+    "64":{inv:"Antonio Alcantara",pases:4,nombres:["Antonio", "Araceli", "Miguel", "Daniela"]},
+    "65":{inv:"Gabriela Perez",pases:3,nombres:["Invitado 1", "Invitado 2", "Invitado 3"]},
+    "66":{inv:"Julio Alcantara Lara",pases:7,nombres:["Julio", "Irma", "Belen", "Emmanuel", "Irma Guadalupe", "German", "Samuel"]},
+    "67":{inv:"Familia Roman Castillo",pases:3,nombres:["Juan Carlos", "Vero", "Abril"]},
+    "68":{inv:"Nicolas Alcantara",pases:2,nombres:["Nicolas", "Amalia"]},
+    "69":{inv:"Amalia Vera",pases:4,nombres:["Amalia", "Karla", "Camilia", "Oscar"]},
+    "70":{inv:"Familia Isabel Mendez",pases:8,nombres:["Invitado 1", "Invitado 2", "Invitado 3", "Invitado 4", "Invitado 5", "Invitado 6", "Invitado 7", "Invitado 8"]},
+    "71":{inv:"Jorge Cruz",pases:2,nombres:["Jorge", "Claudia"]},
+    "72":{inv:"Magaly Cruz",pases:4,nombres:["Magaly", "Fabian", "Santiago", "Sebastian"]},
+    "73":{inv:"Justin Godefroy",pases:2,nombres:["Justin", "Acompañante"]},
+    "74":{inv:"Andre Fragoso",pases:1,nombres:["Andre"]},
+    "75":{inv:"Miguel Almanza",pases:2,nombres:["Miguel", "Acompañante"]},
+    "76":{inv:"Luis David",pases:1,nombres:["Luis David"]}
+
   };
 
   const p=new URLSearchParams(window.location.search);
-  const guestId=p.get('id');
-  let invitado=p.get('invitado'),pases=p.get('pases')||p.get('p'),nombresStr=p.get('nombres'),nombresArray=[];
+  const guestId=(p.get('id')||'').trim();
+  let invitado=p.get('invitado'),pases=parseInt(p.get('pases')||p.get('p'),10)||0,nombresStr=p.get('nombres'),nombresArray=[];
 
   if(guestId&&listaInvitados[guestId]){
-    invitado=listaInvitados[guestId].inv; pases=listaInvitados[guestId].pases; nombresArray=listaInvitados[guestId].nombres;
-  }else if(nombresStr){nombresArray=nombresStr.split(',')}
+    invitado=listaInvitados[guestId].inv; pases=listaInvitados[guestId].pases; nombresArray=listaInvitados[guestId].nombres.slice();
+  }else if(nombresStr){nombresArray=nombresStr.split(/[;,]/).map(s=>s.trim()).filter(Boolean)}
 
-  if(pases){
+  RSVP.pases=pases; RSVP.invitado=invitado||"Pase especial";
+
+  if(pases>0){
     document.getElementById('paseSection').style.display='block';
-    document.getElementById('guestNameDisplay').textContent=invitado||"Pase especial";
-    document.getElementById('guestPassesDisplay').textContent=pases;
+    document.getElementById('guestNameDisplay').textContent=RSVP.invitado;
+    document.getElementById('guestPassesDisplay').textContent=pases+(pases===1?' lugar':' lugares');
   }
 
+  const list=document.getElementById('dynamicGuestList');
   if(nombresArray.length>0){
+    RSVP.mode='nominal';
     let html=`<label style="display:block;font-family:var(--f-sans);font-size:.74rem;color:var(--ink);margin-bottom:15px;letter-spacing:2px;font-weight:500">SELECCIONA QUIÉNES ASISTEN:</label>`;
     nombresArray.forEach((n,i)=>{
-      html+=`<div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;margin-bottom:15px;padding-bottom:15px;border-bottom:1px solid #E2D9C3">
-        <span class="rsvp-name-ext" style="font-size:1.25rem;flex:1;min-width:120px">${n.trim()}</span>
+      const generico=/^invitad[oa]\s*\d*$/i.test(n.trim());
+      const nombreHTML=generico
+        ?`<input type="text" class="guest-name-input" data-idx="${i}" placeholder="Nombre del invitado ${i+1}" aria-label="Nombre del invitado ${i+1}">`
+        :`<span class="rsvp-name-ext">${escapeHTML(n.trim())}</span>`;
+      html+=`<div class="rsvp-guest" data-idx="${i}" data-name="${escapeHTML(n.trim())}" data-generic="${generico?1:0}">
+        ${nombreHTML}
         <div class="radio-ed-container"><label class="radio-ed-label"><input type="radio" name="asistencia_${i}" value="Sí"> Sí</label><label class="radio-ed-label"><input type="radio" name="asistencia_${i}" value="No"> No</label></div></div>`;
     });
-    document.getElementById('dynamicGuestList').innerHTML=html;
+    html+=`<p class="rsvp-counter" id="rsvpCounter"></p><p class="rsvp-limit-msg" id="rsvpLimitMsg"></p>`;
+    list.innerHTML=html;
     document.getElementById('genericRSVPInputs').style.display='none';
+    list.addEventListener('change',e=>{if(e.target.type==='radio')enforcePassLimit(e.target)});
+    enforcePassLimit();
+  }else if(pases>0){
+    /* Pase sin nombres: se elige cuántos asisten (0..pases) */
+    RSVP.mode='cantidad';
+    const sel=document.getElementById('rsvpAsistencia');
+    let opts='<option value="">Selecciona una opción</option>';
+    for(let k=pases;k>=1;k--)opts+=`<option value="${k}">Asistiremos ${k} de ${pases}</option>`;
+    opts+='<option value="0">Lamento no poder acompañarlos</option>';
+    sel.innerHTML=opts;
+    if(invitado)document.getElementById('rsvpNombre').value=invitado;
   }
 
   /* ---------- Cuenta regresiva: 12 dic 2026, 2:45 p.m. ---------- */
@@ -538,24 +643,61 @@ document.addEventListener("DOMContentLoaded",function(){
 });
 
 /* ---------- RSVP ---------- */
+const RSVP={pases:0,invitado:"",mode:'generico'};
+function escapeHTML(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function abrirLink(url){
   const a=document.createElement('a');a.href=url;a.target='_blank';a.rel='noopener';
   document.body.appendChild(a);a.click();document.body.removeChild(a);
 }
+function contarSi(){return document.querySelectorAll('#dynamicGuestList input[type=radio][value="Sí"]:checked').length}
+
+/* Nunca permite más "Sí" que pases asignados */
+function enforcePassLimit(changed){
+  const max=RSVP.pases||document.querySelectorAll('#dynamicGuestList .rsvp-guest').length;
+  let si=contarSi();
+  const msg=document.getElementById('rsvpLimitMsg');
+  if(changed&&changed.value==='Sí'&&si>max){
+    changed.checked=false; si=contarSi();
+    if(msg)msg.textContent=`Tu pase es para ${max} ${max===1?'persona':'personas'}; no es posible confirmar más.`;
+  }else if(msg)msg.textContent='';
+  document.querySelectorAll('#dynamicGuestList input[type=radio][value="Sí"]').forEach(r=>{
+    const bloquear=!r.checked&&si>=max;
+    r.disabled=bloquear;
+    r.parentElement.classList.toggle('disabled',bloquear);
+  });
+  const c=document.getElementById('rsvpCounter');
+  if(c){c.textContent=`Confirmados: ${si} de ${max} ${max===1?'pase':'pases'}`;c.classList.toggle('full',si>=max)}
+}
+
 function sendRSVP(){
-  const list=document.getElementById('dynamicGuestList');
   let msg="";
-  if(list.children.length>0){
-    const ok=[],no=[];let all=true;
-    list.querySelectorAll('.rsvp-name-ext').forEach((s,i)=>{
-      const o=document.querySelector(`input[name="asistencia_${i}"]:checked`);
-      if(!o)all=false;else if(o.value==='Sí')ok.push(s.textContent.trim());else no.push(s.textContent.trim());
+  if(RSVP.mode==='nominal'){
+    const max=RSVP.pases||document.querySelectorAll('#dynamicGuestList .rsvp-guest').length;
+    const ok=[],no=[];let all=true,faltaNombre=false;
+    document.querySelectorAll('#dynamicGuestList .rsvp-guest').forEach(row=>{
+      const i=row.dataset.idx;
+      const o=row.querySelector(`input[name="asistencia_${i}"]:checked`);
+      let nombre=row.dataset.name;
+      if(row.dataset.generic==='1'){
+        const v=row.querySelector('.guest-name-input').value.trim();
+        if(v)nombre=v;else if(o&&o.value==='Sí')faltaNombre=true;
+      }
+      if(!o)all=false;else if(o.value==='Sí')ok.push(nombre);else no.push(nombre);
     });
     if(!all){alert("Por favor, selecciona si asiste o no cada persona de la lista.");return}
-    const inv=document.getElementById('guestNameDisplay').textContent;
-    msg=`¡Hola! Somos *${inv}* y esta es nuestra confirmación para la boda de José Juan y Janinne:\n\n`;
+    if(faltaNombre){alert("Por favor, escribe el nombre de cada invitado que asistirá.");return}
+    if(ok.length>max){alert(`Tu pase es para ${max} personas. No es posible confirmar más lugares de los asignados.`);return}
+    msg=`¡Hola! Somos *${RSVP.invitado}* y esta es nuestra confirmación para la boda de José Juan y Janinne:\n\n`;
     if(ok.length)msg+=`✅ *Asistirán con gusto:*\n- ${ok.join('\n- ')}\n\n`;
     if(no.length)msg+=`❌ *Lamentablemente no podrán asistir:*\n- ${no.join('\n- ')}\n\n`;
+    msg+=`🎟️ *Pases confirmados:* ${ok.length} de ${max}`;
+  }else if(RSVP.mode==='cantidad'){
+    const n=document.getElementById('rsvpNombre').value.trim(),a=document.getElementById('rsvpAsistencia').value;
+    if(!n||a===''){alert("Por favor, completa tu nombre y tu respuesta.");return}
+    const k=Math.min(parseInt(a,10)||0,RSVP.pases);
+    msg=k>0
+      ?`Hola, soy *${n}*.\n\nConfirmo nuestra asistencia a la boda de José Juan y Janinne.\n🎟️ *Pases confirmados:* ${k} de ${RSVP.pases}`
+      :`Hola, soy *${n}*.\n\nLamentablemente no podremos asistir a la boda de José Juan y Janinne.`;
   }else{
     const n=document.getElementById('rsvpNombre').value.trim(),a=document.getElementById('rsvpAsistencia').value;
     if(!n||!a){alert("Por favor, completa tu nombre y tu respuesta.");return}
